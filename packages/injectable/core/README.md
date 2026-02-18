@@ -107,7 +107,7 @@ See Injectable.
 #### To Inject
 - Different ways **To Inject**:
   1. Methods of `di` to inject an instance of an `injectable`: `di.inject`, `di.injectMany` or `di.injectManyWithMeta`.
-  2. Methods of `@lensapp/injectable-mobx` to inject instances reactively: `computedInjectMany`, `computedInjectManyWithMeta` or `computedInjectMaybe`.
+  2. Methods of `@lensapp/injectable-extension-for-mobx` to inject instances reactively: `computedInjectMany`, `computedInjectManyWithMeta` or `computedInjectMaybe`.
 - If injected `injectable` has lifecycle of `keyedSingleton`, different strategies also require the key as `instantiationParameter`.
 
 Different ways **To Inject**:
@@ -314,7 +314,7 @@ expect(validate(42)).toBe(false);
 
 ### Extensions:
 #### MobX: Reactive ways To Inject
-Reactive utilities in `@lensapp/injectable-mobx`.
+Reactive utilities in `@lensapp/injectable-extension-for-mobx`.
 
 See "To Inject" for examples.
 
@@ -344,3 +344,48 @@ See [Feature](https://github.com/lensapp/lens-desktop-monorepo/wiki/Terminology#
 
 #### Global overrides
 See [Global Overrides](https://github.com/lensapp/lens-desktop-monorepo/wiki/Terminology#global-override) in the Lens Wiki.
+
+## Exported API
+
+### Factory functions
+
+| Export | Description |
+|---|---|
+| `createContainer` | Creates a new DI container with the given string id. Returns a `DiContainer`. |
+| `getInjectable` | Defines an injectable — an instruction for what to instantiate and with which lifecycle. |
+| `getInjectionToken` | Creates an injection token (contract/interface) that injectables can implement. |
+| `getSpecificInjectionToken` | Creates a specific injection token directly, with a specifier baked in (alternative to `token.for(specifier)`). |
+| `getInjectableBunch` | Wraps a plain object of injectables into an `InjectableBunch` that can be registered/deregistered as a unit. |
+| `getTypedSpecifier` | Returns a factory for creating typed specifiers that carry generic type information for use with `getInjectionToken`. |
+| `getKeyedSingletonCompositeKey` | Combines multiple values into a single composite key for use in `keyedSingleton` lifecycles. |
+
+### Lifecycles
+
+| Export | Description |
+|---|---|
+| `lifecycleEnum` | Object with the three lifecycle strategies: `singleton`, `keyedSingleton(options)`, and `transient`. |
+
+### Decorators
+
+| Export | Description |
+|---|---|
+| `createInjectionTargetDecorator` | Creates an injection decorator that wraps every `di.inject` call for a given target. Respects no lifecycle — called on every inject. |
+| `createInstantiationTargetDecorator` | Creates an instantiation decorator that wraps the `instantiate` function for a given target. Respects the injectable's lifecycle. |
+| `injectionDecoratorToken` | Injection token used to register injection decorators created with `createInjectionTargetDecorator`. |
+| `instantiationDecoratorToken` | Injection token used to register instantiation decorators created with `createInstantiationTargetDecorator`. |
+
+### Registration callbacks
+
+| Export | Description |
+|---|---|
+| `registrationCallbackToken` | Injection token for registering callbacks that are called whenever an injectable is registered into the container. |
+| `deregistrationCallbackToken` | Injection token for registering callbacks that are called whenever an injectable is deregistered from the container. |
+
+### Utilities
+
+| Export | Description |
+|---|---|
+| `toFlatInjectables` | Flattens an `InjectableBunch` (or array of injectables/bunches) into a plain array of `Injectable` objects. |
+| `isInjectable` | Type guard — returns `true` if the value is an `Injectable`. |
+| `isInjectableBunch` | Type guard — returns `true` if the value is an `InjectableBunch`. |
+| `isInjectionToken` | Type guard — returns `true` if the value is an `InjectionToken`. |
